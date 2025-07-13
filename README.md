@@ -9,6 +9,8 @@
 ## Setup and Usage 
 
 ## Dataset and Data Collection Notes
+- Big picture: Scrape data with SeleniumBase -> Save to SQLite -> Analyze with SQL / pandas -> Export query to CSV -> Import CSV into Tableau
+
 - Since injury data will keep growing and changing over time, we have decided whether we should do a one-time snapshot of current data VS. an automated data scraping program for up-to-date injury reports. As of now, we are opting for the one-time snapshot, we will focus on the 2024-2025 NBA season data ~~,we are also getting blocked with our simple GET requests and even Selenium's webdriver due to the site's anti-scraping measures~~ . 
 - Future ideas: 
   - Automate web scraping capabilities with Selenium + an undetected chromedriver or some kind of way to bypass cloudflare bot detection
