@@ -1,17 +1,17 @@
 #creates a csv file from webpage
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+from seleniumbase import SB
+#import the SB class from the library, SB is a simplified Selenium wrapper that manages setup/teardown of the browser automatically -- no need to call quit() after completing all tasks!
 
-driver = webdriver.Chrome() #start session
-url = "https://www.prosportstransactions.com/basketball/Search/SearchResults.php?Player=&Team=&BeginDate=&EndDate=&InjuriesChkBx=yes&Submit=Search&start=31850"
+#launch chrome browser in stealthmode using undetected-chromedriver (bypasses Cloudflare protections)
+with SB(uc=True) as sb:
+    #sb is the browser instance object, we can interact with the page using this
 
-driver.get(url) #take action on browser
+    #this url is what we scrape info from, currently just one page from PST
+    url = "https://www.prosportstransactions.com/basketball/Search/SearchResults.php?Player=&Team=&BeginDate=&EndDate=&InjuriesChkBx=yes&Submit=Search&start=31850"
 
-title = driver.title #request browser info
+    # tells browser to open url and try 4 times if there's a connection failure or bot challenge 
+    sb.uc_open_with_reconnect(url, 4)
 
-#we want to make sure element is on page before attempting to locate it, implicit wait is used here
-driver.implicitly_wait(2.0)
+    print("Page title", sb.get_title())
 
-print(f"the website's title is {title}\n")
 
-driver.quit()
