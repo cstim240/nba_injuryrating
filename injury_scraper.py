@@ -2,6 +2,8 @@
 from seleniumbase import SB
 # import the SB class from the library, SB is a simplified Selenium wrapper that manages setup/teardown of the browser automatically -- no need to call quit() after completing all tasks!
 from bs4 import BeautifulSoup
+import sqlite3
+import os
 
 def removeBullet(name):
     return name.replace("• ", "")
@@ -49,6 +51,26 @@ with SB(uc=True) as sb:
         if len(cells) >= 3:
             player_name = removeBullet(cells[2])
             print(player_name)
+
+    #connect sqlite if player.db it exists or create the database file
+    conn = sqlite3.connect('records.db')
+    cursor = conn.cursor()
+
+    #create the players table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS records (
+            id INTEGER PRIMARY KEY,
+            name TEXT NOT NULL,
+            date TEXT,
+            notes TEXT
+        )
+    ''')
+
+    #process scraped data and insert into DB
+
+    conn.commit()
+    conn.close()
+        
 
 
 
