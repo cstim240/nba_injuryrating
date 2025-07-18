@@ -26,7 +26,9 @@
   - Undetected-chromedriver has to adapt to changes caused by new versions of Chrome, Selenium, Cloudflare.
   - We also need SeliniumBase UC Mode which is a modified fork of undetected-chromedrier which has bug fixes, additional features like multithreading support. 
     - UC mode is one of many SeleniumBase modes...
-- Relevant libraries: 'seleniumbase', 'BeautifulSoup4', 
+  
+  - We use sqlite3 as its part of Python's standard library, I'm not interested in running a server process, and its lightweight which is perfect for the limited amount of operations we plan to use it for -- an intermediate storage prior to analysis.
+- Relevant libraries: 'seleniumbase', 'BeautifulSoup4', 'sqlite3'
 
 ## Data Exploration and Preparation
 
