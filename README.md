@@ -10,10 +10,15 @@
 
 ## Dataset and Data Collection Notes
 - Big picture: Scrape data with SeleniumBase and BeautifulSoup4 -> Save to SQLite -> Analyze with SQL / pandas -> Export query to CSV -> Import CSV into Tableau
+- Current objective: implement pagination to scrape multiple pages until the start of the 2024-25 season is reached
+  -  Look into datetime objects in Python to set cutoff and current datetime -- somehow we have to stop inserting if datetime is less than cutoff (since we're starting from the most recent 2025 --> somewhere in 2024)
+  -  Look into how to click on the 'previous' link of the page with SeleniumBase
+  -  Figure out how to continue this loop if current datetime is still more than the cutoff
 
 - Since injury data will keep growing and changing over time, we have decided to only acquire data from the indicated season (2024-25) using a one-time snapshot with injury_scraper VS. a live-automated data scraping program which is likely to get detected as a bot by the website.
   
 - Future ideas: 
+  - Season Range Scraping (let users enter the season year they want to look into)!
   - Create a requirements.txt to list out installed libraries
   - Look into virtual environments
 - Data source: Pro Sports Transaction (PST) which has the most recent injury data and its free!
