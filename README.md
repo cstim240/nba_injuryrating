@@ -48,6 +48,9 @@
     - sqlite3.connect will connect to the existing records.db if it exists or create it if not
     - the AUTOINCREMENT for the id field means it is filled automatically with an unused integer everytime we create an entry
     - PST's format looks like this and it's how we acquire the information: ['2025-05-01', 'Rockets', '• Jock Landale', 'knee injury (out for season)']
+    - We use the UNIQUE constraint on the combination of name, date, notes to prevent insertion of a similar rows. We do leave out id as its autoincremented and always unique, which means its inclusion will not prevent duplicate records. 
+    - INSERT OR IGNORE decides if the recod exists, it is skipped, but if it's new, it gets inserted.
+    - We also use ON CONFLICT(..) DO UPDATE in the event that the name, date are the same but the reason for their injury may have been updated (see this link for reference: https://sqlite.org/lang_upsert.html)
 
 - Relevant libraries: 'seleniumbase', 'BeautifulSoup4', 'sqlite3'
 

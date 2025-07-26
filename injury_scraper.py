@@ -29,7 +29,8 @@ with SB(uc=True) as sb:
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             date TEXT,
-            notes TEXT
+            notes TEXT,
+            UNIQUE(name, date, notes)
         )
     ''')
 
@@ -42,9 +43,10 @@ with SB(uc=True) as sb:
         notes = cells[3]
 
         cursor.execute('''
-            INSERT INTO records
+            INSERT OR IGNORE INTO records
             (name, date, notes)
             VALUES (?, ?, ?)
+            ON CONFLICT(name, date) DO UPDATE SET notes=excluded.notes
         ''', (player_name, date, notes))
 
     conn.commit()
