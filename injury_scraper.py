@@ -35,6 +35,7 @@ def scrapePage(sb, offset, cutoff_date):
 
         # process scraped data and insert into DB
         row = pst_table.find_all("tr")
+        found_old_date = False # to keep track if we're at the page where CUTOFF_DATE is located
         for row in row[1:]:  #skips the header row
             cells = list(row.stripped_strings)
             if len(cells) < 4:
@@ -45,14 +46,21 @@ def scrapePage(sb, offset, cutoff_date):
 
             current_date = datetime.strptime(date, "%Y-%m-%d").date()
             if current_date < cutoff_date:
-                inSeason = False
-                break # stop processing rest of page
+                found_old_date = True
+                continue # skips this row but keep processing the page
 
             cursor.execute('''
-                INSERT INTO records
+                INSERT OR IGNORE INTO records
                 (name, date, notes)
                 VALUES (?, ?, ?)
             ''', (player_name, date, notes))
+
+            # After processing the entire page, check if we should stop
+            if found_old_date:
+                inSeason = False
+                # print("Stopping scraping - reached cutoff date")
+            # this fixes our input errors on the boundary which was skewing our results -- ie. Kristaps Porzingis was injured on 9-24
+            # but because we start our scraping from the top of the page, we prematurely end processing when we encounter Jarrett Allen's row which has 4-30-2024, its way before the CUTOFF_DATE so we initially had a break there, meaning we didn't insert the porzingis injury --> resulting in the output in csv as total injury days = 9 days (if you we're watching the 2024-25 season you would know Porzingis was gone for half the season)
 
         conn.commit()
         conn.close()
@@ -63,7 +71,7 @@ def scrapePage(sb, offset, cutoff_date):
 
         sleepy_time = random.uniform(1, 2.5)
         time.sleep(sleepy_time)
-        print(f"Sleeping for {sleepy_time} seconds! They won't know I'm a bot hehe!")
+        # print(f"Sleeping for {sleepy_time} seconds! They won't know I'm a bot hehe!")
     
     print(f"Done! We scraped {pageCounter} pages!")
 
