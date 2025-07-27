@@ -66,7 +66,7 @@ def getInjuryPeriods(rows):
             continue #skip
     
     #case 4: players who got injured and never returned this season?
-    cutoff_date = date(2025, 7, 26) #YYYY, MM, DD
+    cutoff_date = date(2025, 6, 22) #YYYY, MM, DD
 
     for name, (injury_date, injury_note) in currently_injured.items():
         # create an injury period object
