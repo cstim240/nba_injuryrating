@@ -1,13 +1,12 @@
 import sqlite3
 from datetime import datetime, date 
+import pandas as pd
 
-'''
-                "name": name, 
-                "injury_date": injury_date,
-                "return_date": current_date,
-                "injury_note": injury_note,
-                "recovery_days": (current_date - injury_date).days
-'''
+def exportToCSV(hashmap):
+    # with our hashmap input, pandas treats the out keys (player names) as columns, not rows
+    # so we have to transpose to get the correct orientation
+    df = pd.DataFrame(hashmap).transpose()
+    df.to_csv("aggregateInjuries.csv")
 
 # returns a hashmap of players with their combined injured days, injuries sustained
 def aggregateInjuryPeriods(periods):
@@ -29,7 +28,8 @@ def aggregateInjuryPeriods(periods):
                 "injuries_sustained" : [period["injury_note"]]
             }
     
-    print(f"the aggregate: {aggregateInjuryPer}")
+    print(f"aggregation done!")
+    return aggregateInjuryPer
 
 # returns a list of injury periods, along with player name, injury date, return date, recovery date, type of injury
 def getInjuryPeriods(rows):
@@ -103,7 +103,8 @@ def main():
     periods = getInjuryPeriods(rows) # pair injury date and return to lineup into a 'single injury period' -- raw unmanipulated data
     # print(f"Periods: {periods}")
     # sum the injury duration/s from each player's injury period(s)
-    aggregateInjuryPeriods(periods) 
+    sumAg = aggregateInjuryPeriods(periods) 
+    exportToCSV(sumAg)
 
 
 if __name__ == "__main__":
