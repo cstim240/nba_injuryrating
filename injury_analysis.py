@@ -1,6 +1,37 @@
 import sqlite3
 from datetime import datetime, date 
 
+'''
+                "name": name, 
+                "injury_date": injury_date,
+                "return_date": current_date,
+                "injury_note": injury_note,
+                "recovery_days": (current_date - injury_date).days
+'''
+
+# returns a hashmap of players with their combined injured days, injuries sustained
+def aggregateInjuryPeriods(periods):
+    aggregateInjuryPer = {} # key = name, value = the other stuff
+
+    for period in periods:
+        name = period["name"]
+        
+        if name in aggregateInjuryPer:
+            # update existing entry
+            aggregateInjuryPer[name]["injury_count"] += 1
+            aggregateInjuryPer[name]["injured_days"] += period["recovery_days"]
+            aggregateInjuryPer[name]["injuries_sustained"].append(period["injury_note"])
+        else:
+            # create new entry in hashmap
+            aggregateInjuryPer[name] = {
+                "injury_count" : 1,
+                "injured_days" : period["recovery_days"],
+                "injuries_sustained" : [period["injury_note"]]
+            }
+    
+    print(f"the aggregate: {aggregateInjuryPer}")
+
+# returns a list of injury periods, along with player name, injury date, return date, recovery date, type of injury
 def getInjuryPeriods(rows):
     # source is a list containing all the rows in the form: [ (name, date, record), ... ,(name, date, record)], we want to turn this into the injury_periods list where the components are separated into a dictionary object, easier to analyze!
 
@@ -69,9 +100,11 @@ def fetchRows():
 
 def main():
     rows = fetchRows()
-    periods = getInjuryPeriods(rows) # pair injury date and return to lineup into a 'single injury period'
-    print(f"Periods: {periods}")
-    # sum the injury duration from each player's periods combined
+    periods = getInjuryPeriods(rows) # pair injury date and return to lineup into a 'single injury period' -- raw unmanipulated data
+    # print(f"Periods: {periods}")
+    # sum the injury duration/s from each player's injury period(s)
+    aggregateInjuryPeriods(periods) 
+
 
 if __name__ == "__main__":
     main()
