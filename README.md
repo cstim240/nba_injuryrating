@@ -9,7 +9,10 @@
 ## Setup and Usage 
 - Big picture: Scrape data with SeleniumBase and BeautifulSoup4 -> Save to SQLite database -> Analyze with SQL / pandas -> Export query to CSV -> Import CSV into Tableau
 - Current objective: Analyze acquired data from records.db 
-  - Sum the injury duration per periods, then sum the sums for each player
+  - Sum the injury duration per periods, then sum the sums for each player 
+  - Find the most common injuries
+  - Filter out starters from bench players
+  - Create an injury rating per injury type
 
 ## Dataset and Data Collection Notes
 - Since injury data will keep growing and changing over time, we have decided to only acquire data from the indicated season (2024-25 via modifiable cutoff_date) using a one-time snapshot with injury_scraper VS. a live-automated data scraping program which is likely to get detected as a bot by the website.
