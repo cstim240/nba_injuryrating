@@ -56,6 +56,7 @@
     
     - Pagination process: we use PST's url! For every page, the end of the link ends with an offset value that decrements/increments by 25 whenever you move to the previous/next page. We can use a boolean variable like ```inSeason``` to keep track of whether the row in question is less than the cutoff. 
     - We use the datetime module of Python's standard lib to set the cutoff for data acquisition. Since we don't know the exact date the season starts, we use this as an estimate: https://www.tickpick.com/blog/how-long-is-nba-basketball-season/
+      - Note that we use the unpack operator ```*CUTOFF_DATE``` to unpack the tuple in our declared constant. This is a Python feature, we're not dereferencing a pointer.
 
   - Relevant libraries: 'seleniumbase', 'bs4' 
   - Relevant modules: 'sqlite3', datetime, random, time

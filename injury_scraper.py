@@ -5,39 +5,16 @@ from datetime import datetime
 import random
 import time
 
-cutoff = datetime(2024, 9, 1).date() #yyyy, mm, dd of date we want to scrape to
-currentDate = datetime.today()
-print(f"Today's date: {currentDate}")
-
-inSeason = True
-pageCounter = 0
+INITIAL_OFFSET = 31850 # used as part of the starting url, decremented each time we go back a page
+CUTOFF_DATE = (2024, 9, 1) #YYYY, MM, DD
+DB_PATH = 'records.db'
 
 def removeBullet(name):
     return name.replace("• ", "")
 
-with SB(uc=True, headless=True) as sb:
-    offset = 31850 #used as part of the url, decremented each time we go back a page
-
-    # Create DB once prior to looping
-    conn = sqlite3.connect('records.db')
-    cursor = conn.cursor()
-
-    cursor.execute(''' DROP TABLE IF EXISTS records ''')
-
-    # create the players table
-    cursor.execute('''
-        CREATE TABLE records (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            date TEXT,
-            notes TEXT,
-            UNIQUE(name, date)
-        )
-    ''')
-
-    conn.commit()
-    conn.close()
-
+def scrapePage(sb, offset, cutoff_date):
+    inSeason = True
+    pageCounter = 0
     while inSeason:
         # url where we begin our scrape- the most recent page, currently just one page from PST (this is from July 26, 2025)
         url = f"https://www.prosportstransactions.com/basketball/Search/SearchResults.php?Player=&Team=&BeginDate=&EndDate=&InjuriesChkBx=yes&Submit=Search&start={offset}"
@@ -66,8 +43,8 @@ with SB(uc=True, headless=True) as sb:
             player_name = removeBullet(cells[2])
             notes = cells[3]
 
-            currentDate = datetime.strptime(date, "%Y-%m-%d").date()
-            if currentDate < cutoff:
+            current_date = datetime.strptime(date, "%Y-%m-%d").date()
+            if current_date < cutoff_date:
                 inSeason = False
                 break # stop processing rest of page
 
@@ -90,8 +67,38 @@ with SB(uc=True, headless=True) as sb:
     
     print(f"Done! We scraped {pageCounter} pages!")
 
-            
+def createDB():
+    # Create DB once prior to looping
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
 
+    cursor.execute(''' DROP TABLE IF EXISTS records ''')
+
+    # create the players table
+    cursor.execute('''
+        CREATE TABLE records (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            date TEXT,
+            notes TEXT,
+            UNIQUE(name, date)
+        )
+    ''')
+
+    conn.commit()
+    conn.close()
+
+def main():
+    cutoff_date = datetime(*CUTOFF_DATE).date() #yyyy, mm, dd of date we want to scrape to
+
+    offset = INITIAL_OFFSET
+
+    createDB()
+    with SB(uc=True, headless=True) as sb:
+        scrapePage(sb, offset, cutoff_date)
+
+if __name__ == "__main__":
+    main()
 
 
 
