@@ -4,7 +4,7 @@
 
 ### Business question: "Which NBA players are the most injury-prone based on historical data?"
 
-### Audience: Fantasy Basketball Players, Casual fans, etc.
+### Audience: Fantasy Basketball Players, Casual fans, Stephen A. Smith etc.
 
 ## Setup and Usage 
 
