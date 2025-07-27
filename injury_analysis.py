@@ -96,6 +96,8 @@ def fetchRows():
 
     conn.close()
 
+    print(f"rows: {rows}")
+
     return rows
 
 def main():
