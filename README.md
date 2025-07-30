@@ -8,7 +8,7 @@
 
 ## Setup and Usage 
 - Big picture: Scrape data with SeleniumBase and BeautifulSoup4 -> Save to SQLite database -> Analyze with SQL / pandas -> Export query to CSV -> Import CSV into Tableau
-- Current objective: Analyze acquired data from records.db 
+- Current objective: Analyze acquired data from records.db + ADD THE ADDITIONAL FILTER FOR IR MOVES, rescrape and reanalyze data
   - Sum the injury duration per periods, then sum the sums for each player 
   - Find the most common injuries
   - Filter out starters from bench players
