@@ -4,7 +4,7 @@
 
 ### Business question: "Which NBA players are the most injury-prone based on historical data?"
 
-### Audience: Fantasy Basketball Players, Casual fans, Stephen A. Smith etc.
+### Audience: Fantasy Basketball Players, Casual fans, etc.
 
 ## Setup and Usage 
 - Big picture: Scrape data with SeleniumBase and BeautifulSoup4 -> Save to SQLite database -> Analyze with SQL / pandas -> Export query to CSV -> Import CSV into Tableau
