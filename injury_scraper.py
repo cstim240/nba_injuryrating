@@ -5,7 +5,7 @@ from datetime import datetime
 import random
 import time
 
-INITIAL_OFFSET = 31850 # used as part of the starting url, decremented each time we go back a page
+INITIAL_OFFSET = 3150 # used as part of the starting url, decremented each time we go back a page
 CUTOFF_DATE = (2024, 9, 1) #YYYY, MM, DD
 DB_PATH = 'records.db'
 
@@ -17,12 +17,13 @@ def scrapePage(sb, offset, cutoff_date):
     pageCounter = 0
     while inSeason:
         # url where we begin our scrape- the most recent page, currently just one page from PST (this is from July 26, 2025)
-        url = f"https://www.prosportstransactions.com/basketball/Search/SearchResults.php?Player=&Team=&BeginDate=&EndDate=&InjuriesChkBx=yes&Submit=Search&start={offset}"
+        url = f"https://www.prosportstransactions.com/basketball/Search/SearchResults.php?Player=&Team=&BeginDate=2024-09-01&EndDate=2025-08-19&ILChkBx=yes&InjuriesChkBx=yes&PersonalChkBx=yes&Submit=Search&start={offset}"
 
         print(f"Loading... page: {offset}")
 
         # tells browser to open url and try 4 times if there's a connection failure or bot challenge 
         sb.uc_open_with_reconnect(url, 4)
+        sb.wait_for_element("tr")
 
         pst_html = sb.get_page_source()
         soup = BeautifulSoup(pst_html, 'html.parser')
@@ -71,7 +72,7 @@ def scrapePage(sb, offset, cutoff_date):
 
         sleepy_time = random.uniform(1, 2.5)
         time.sleep(sleepy_time)
-        # print(f"Sleeping for {sleepy_time} seconds! They won't know I'm a bot hehe!")
+        print(f"Sleeping for {sleepy_time} seconds! They won't know I'm a bot hehe!")
     
     print(f"Done! We scraped {pageCounter} pages!")
 
@@ -103,6 +104,7 @@ def main():
 
     createDB()
     with SB(uc=True, headless=True) as sb:
+        #sb.sleep(2)
         scrapePage(sb, offset, cutoff_date)
 
 if __name__ == "__main__":
