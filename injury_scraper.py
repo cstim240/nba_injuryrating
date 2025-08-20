@@ -50,6 +50,8 @@ def scrapePage(sb, offset, cutoff_date):
                 found_old_date = True
                 continue # skips this row but keep processing the page
 
+            print(f"Saving player: {player_name}, injury: {notes}")
+
             cursor.execute('''
                 INSERT OR IGNORE INTO records
                 (name, date, notes)
@@ -59,7 +61,6 @@ def scrapePage(sb, offset, cutoff_date):
             # After processing the entire page, check if we should stop
             if found_old_date:
                 inSeason = False
-                # print("Stopping scraping - reached cutoff date")
             # this fixes our input errors on the boundary which was skewing our results -- ie. Kristaps Porzingis was injured on 9-24
             # but because we start our scraping from the top of the page, we prematurely end processing when we encounter Jarrett Allen's row which has 4-30-2024, its way before the CUTOFF_DATE so we initially had a break there, meaning we didn't insert the porzingis injury --> resulting in the output in csv as total injury days = 9 days (if you we're watching the 2024-25 season you would know Porzingis was gone for half the season)
 
@@ -69,6 +70,9 @@ def scrapePage(sb, offset, cutoff_date):
 
         pageCounter += 1
         offset -= 25 # move to the previous page
+
+        if offset < 0:
+            break
 
         sleepy_time = random.uniform(1, 2.5)
         time.sleep(sleepy_time)
@@ -104,7 +108,6 @@ def main():
 
     createDB()
     with SB(uc=True, headless=True) as sb:
-        #sb.sleep(2)
         scrapePage(sb, offset, cutoff_date)
 
 if __name__ == "__main__":
