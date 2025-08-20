@@ -2,6 +2,11 @@ import sqlite3
 from datetime import datetime, date 
 import pandas as pd
 
+CUTOFF_YEAR = 2025
+CUTOFF_DAY = 19
+CUTOFF_MONTH = 8 
+CUTOFF_DATE = date(CUTOFF_YEAR, CUTOFF_MONTH, CUTOFF_DAY)
+
 def exportToCSV(hashmap):
     # with our hashmap input, pandas treats the out keys (player names) as columns, not rows
     # so we have to transpose to get the correct orientation
@@ -44,14 +49,16 @@ def getInjuryPeriods(rows):
     for row in rows:
         name = row[0]
         current_date = datetime.strptime(row[1], "%Y-%m-%d").date() # from str to datetime obj
-        note = row[2].strip().lower()
+        #note = row[2].strip().lower()
+        note = row[2].lower()
 
         #case 1: player sustains injury from this season
-        if note != "returned to lineup" and name not in currently_injured:
+        if note != "returned to lineup" and note != "activated from IL" and name not in currently_injured:
             currently_injured[name] = (current_date, note)
+            # print(f"Adding {name} to the injured list!")
 
         #case 2: player returns from injury from this season
-        elif note == "returned to lineup" and name in currently_injured:
+        elif (note == "returned to lineup" or note == "activated from IL") and name in currently_injured:
             injury_date, injury_note = currently_injured.pop(name)
             injury_periods.append({
                 "name": name, 
@@ -60,13 +67,15 @@ def getInjuryPeriods(rows):
                 "injury_note": injury_note,
                 "recovery_days": (current_date - injury_date).days
             })
+            # print(f"Adding {injury_note} to {name}'s file")
 
         #case 3: player returns from injury from past season
-        elif note == "returned to lineup" and name not in currently_injured:
+        elif (note == "returned to lineup" or note == "activated from IL") and name not in currently_injured:
+            print(f"Ignored case for {name}, no matching injury entry, note: {note}")
             continue #skip
     
     #case 4: players who got injured and never returned this season?
-    cutoff_date = date(2025, 6, 22) #YYYY, MM, DD
+    # we use our CUTOFF_DATE constant
 
     for name, (injury_date, injury_note) in currently_injured.items():
         # create an injury period object
@@ -75,8 +84,9 @@ def getInjuryPeriods(rows):
             "injury_date": injury_date,
             "return_date": current_date,
             "injury_note": injury_note,
-            "recovery_days": (cutoff_date - injury_date).days
+            "recovery_days": (CUTOFF_DATE - injury_date).days
         })
+        # print(f"For player {name}, adding injury note: {injury_note}")
     #we give them the arbitrary return date in form of cutoff
 
     return injury_periods
@@ -85,10 +95,11 @@ def fetchRows():
     conn = sqlite3.connect('records.db')
     cur = conn.cursor()
 
+    # we manually exclude a few erroneuous values placed by PST in the WHERE clause
     cur.execute('''
         SELECT name, date, notes
         FROM records
-        WHERE name <> "illness (DTD)" AND name <> "sore lower back (DTD)"
+        WHERE name <> "illness (DTD)" OR name <> "sore lower back (DTD)" OR name <> "fractured rib (out indefinitely)" OR name <> "torn ACL in left knee (out for season)"
         ORDER BY name, date
     ''')
 
@@ -96,7 +107,7 @@ def fetchRows():
 
     conn.close()
 
-    print(f"rows: {rows}")
+    # print(f"rows: {rows}")
 
     return rows
 
