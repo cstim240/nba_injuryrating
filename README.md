@@ -8,7 +8,7 @@
 
 ## Setup and Usage 
 - Big picture: Scrape data with SeleniumBase and BeautifulSoup4 -> Save to SQLite database -> Analyze with SQL / pandas -> Export query to CSV -> Import CSV into Tableau
-- Current objective: Analyze acquired data from records.db + ADD THE ADDITIONAL FILTER FOR IR MOVES, rescrape and reanalyze data
+- Current objective: Acquire a source for player minutes so we can further filter players in our analysis - we want top 150 players in minutes played
   - Sum the injury duration per periods, then sum the sums for each player 
   - Find the most common injuries
   - Filter out starters from bench players
@@ -104,7 +104,7 @@
     - group by injury type and average the durations.
 
 - injury_analysis.py
-  - Notes:
+  - Notes: Ran into an error with my getInjuryPeriods function where I pair up injury beginning and end rows -- my if statements forgot to account that the notes were turned to lowercase, this resulted in some notes being omitted as I initially had 'note != "activated from IL"' which was enough to disregard some of the player injury notes. 
 
 - Relevant libraries/modules:
   - `sqlite3` - database access

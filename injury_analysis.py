@@ -49,16 +49,15 @@ def getInjuryPeriods(rows):
     for row in rows:
         name = row[0]
         current_date = datetime.strptime(row[1], "%Y-%m-%d").date() # from str to datetime obj
-        #note = row[2].strip().lower()
-        note = row[2].lower()
+        note = row[2].strip().lower()
 
         #case 1: player sustains injury from this season
-        if note != "returned to lineup" and note != "activated from IL" and name not in currently_injured:
+        if note != "returned to lineup" and note != "activated from il" and name not in currently_injured:
             currently_injured[name] = (current_date, note)
-            # print(f"Adding {name} to the injured list!")
+            print(f"Case 1: Adding {name} to the injured list with injury: {note}!")
 
         #case 2: player returns from injury from this season
-        elif (note == "returned to lineup" or note == "activated from IL") and name in currently_injured:
+        elif (note == "returned to lineup" or note == "activated from il") and name in currently_injured:
             injury_date, injury_note = currently_injured.pop(name)
             injury_periods.append({
                 "name": name, 
@@ -67,10 +66,10 @@ def getInjuryPeriods(rows):
                 "injury_note": injury_note,
                 "recovery_days": (current_date - injury_date).days
             })
-            # print(f"Adding {injury_note} to {name}'s file")
+            print(f"Case 2: Adding {injury_note} to {name}'s file")
 
         #case 3: player returns from injury from past season
-        elif (note == "returned to lineup" or note == "activated from IL") and name not in currently_injured:
+        elif (note == "returned to lineup" or note == "activated from il") and name not in currently_injured:
             print(f"Ignored case for {name}, no matching injury entry, note: {note}")
             continue #skip
     
