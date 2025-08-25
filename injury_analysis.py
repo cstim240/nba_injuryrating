@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import datetime, date 
+from collections import defaultdict
 import pandas as pd
 
 CUTOFF_YEAR = 2025
@@ -12,6 +13,10 @@ def exportToCSV(hashmap):
     # so we have to transpose to get the correct orientation
     df = pd.DataFrame(hashmap).transpose()
     df.to_csv("aggregateInjuries.csv")
+
+def exportToCSV2(hashmap):
+    df = pd.DataFrame(hashmap)
+    df.to_csv("injuryTypes.csv")
 
 # returns a hashmap of players with their combined injured days, injuries sustained
 def aggregateInjuryPeriods(periods):
@@ -36,6 +41,23 @@ def aggregateInjuryPeriods(periods):
     print(f"aggregation done!")
     return aggregateInjuryPer
 
+# returns a list of injuries and the players 
+def aggregateInjuryTypes(rows):
+    injury_types = []
+
+    for row in rows:
+        name = row[0]
+        injury_type = row[2].strip().lower()
+
+        if injury_type != "returned to lineup" and injury_type != "activated from il":
+            injury_types.append({
+                "injury": injury_type,
+                "name": name
+                }
+            )
+
+    return injury_types
+
 # returns a list of injury periods, along with player name, injury date, return date, recovery date, type of injury
 def getInjuryPeriods(rows):
     # source is a list containing all the rows in the form: [ (name, date, record), ... ,(name, date, record)], we want to turn this into the injury_periods list where the components are separated into a dictionary object, easier to analyze!
@@ -54,7 +76,7 @@ def getInjuryPeriods(rows):
         #case 1: player sustains injury from this season
         if note != "returned to lineup" and note != "activated from il" and name not in currently_injured:
             currently_injured[name] = (current_date, note)
-            print(f"Case 1: Adding {name} to the injured list with injury: {note}!")
+            # print(f"Case 1: Adding {name} to the injured list with injury: {note}!")
 
         #case 2: player returns from injury from this season
         elif (note == "returned to lineup" or note == "activated from il") and name in currently_injured:
@@ -66,7 +88,7 @@ def getInjuryPeriods(rows):
                 "injury_note": injury_note,
                 "recovery_days": (current_date - injury_date).days
             })
-            print(f"Case 2: Adding {injury_note} to {name}'s file")
+            # print(f"Case 2: Adding {injury_note} to {name}'s file")
 
         #case 3: player returns from injury from past season
         elif (note == "returned to lineup" or note == "activated from il") and name not in currently_injured:
@@ -98,7 +120,7 @@ def fetchRows():
     cur.execute('''
         SELECT name, date, notes
         FROM records
-        WHERE name <> "illness (DTD)" OR name <> "sore lower back (DTD)" OR name <> "fractured rib (out indefinitely)" OR name <> "torn ACL in left knee (out for season)"
+        WHERE name <> "illness (DTD)" AND name <> "sore lower back (DTD)" AND name <> "fractured rib (out indefinitely)" AND name <> "torn ACL in left knee (out for season)"
         ORDER BY name, date
     ''')
 
@@ -106,7 +128,7 @@ def fetchRows():
 
     conn.close()
 
-    # print(f"rows: {rows}")
+    print(f"rows: {rows}")
 
     return rows
 
@@ -115,6 +137,9 @@ def main():
     periods = getInjuryPeriods(rows) # pair injury date and return to lineup into a 'single injury period' -- raw unmanipulated data
     # print(f"Periods: {periods}")
     # sum the injury duration/s from each player's injury period(s)
+    injuryTypes = aggregateInjuryTypes(rows)
+    exportToCSV2(injuryTypes)
+
     sumAg = aggregateInjuryPeriods(periods) 
     exportToCSV(sumAg)
 
