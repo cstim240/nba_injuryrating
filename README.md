@@ -4,6 +4,8 @@
 
 ### Business question: "Which NBA players are the most injury-prone based on historical data?"
 
+https://public.tableau.com/views/NBA2024-25PlayerInjuryData/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link
+
 ### Audience: Fantasy Basketball Players, Casual fans, etc.
 
 ## Setup and Usage 
