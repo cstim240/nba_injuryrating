@@ -2,6 +2,7 @@ import sqlite3
 from datetime import datetime, date 
 from collections import defaultdict
 import pandas as pd
+import os
 
 CUTOFF_YEAR = 2025
 CUTOFF_DAY = 19
@@ -9,14 +10,18 @@ CUTOFF_MONTH = 8
 CUTOFF_DATE = date(CUTOFF_YEAR, CUTOFF_MONTH, CUTOFF_DAY)
 
 def exportToCSV(hashmap):
+    # check if the generatedCSVs folder exists
+    os.makedirs("generatedCSVs", exist_ok=True)
     # with our hashmap input, pandas treats the out keys (player names) as columns, not rows
     # so we have to transpose to get the correct orientation
     df = pd.DataFrame(hashmap).transpose()
-    df.to_csv("aggregateInjuries.csv")
+    df.to_csv("generatedCSVs/aggregateInjuries.csv")
 
 def exportToCSV2(hashmap):
+    # check if the generatedCSVs folder exists
+    os.makedirs("generatedCSVs", exist_ok=True)
     df = pd.DataFrame(hashmap)
-    df.to_csv("injuryTypes.csv")
+    df.to_csv("generatedCSVs/injuryTypes.csv")
 
 # returns a hashmap of players with their combined injured days, injuries sustained
 def aggregateInjuryPeriods(periods):
