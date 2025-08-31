@@ -4,17 +4,14 @@
 
 ### Business question: "Which NBA players are the most injury-prone based on historical data?"
 
+Quick link to the data viz:
 https://public.tableau.com/views/NBA2024-25PlayerInjuryData/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link
 
 ### Audience: Fantasy Basketball Players, Casual fans, etc.
 
 ## Setup and Usage 
-- Big picture: Scrape data with SeleniumBase and BeautifulSoup4 -> Save to SQLite database -> Analyze with SQL / pandas -> Export query to CSV -> Import CSV into Tableau
-- Current objective: Acquire a source for player minutes so we can further filter players in our analysis - we want top 150 players in minutes played
-  - Sum the injury duration per periods, then sum the sums for each player 
-  - Find the most common injuries
-  - Filter out starters from bench players
-  - Create an injury rating per injury type
+- Big picture: Scrape data with SeleniumBase and BeautifulSoup4 -> Save to SQLite database -> Analyze with SQL / pandas -> Export query to CSV -> Get player data from Basketball Reference --> Import CSVs into Tableau
+- Current objective: Embed tableau onto github pages
 
 ## Dataset and Data Collection Notes
 - Since injury data will keep growing and changing over time, we have decided to only acquire data from the indicated season (2024-25 via modifiable cutoff_date) using a one-time snapshot with injury_scraper VS. a live-automated data scraping program which is likely to get detected as a bot by the website.
@@ -81,7 +78,6 @@ https://public.tableau.com/views/NBA2024-25PlayerInjuryData/Dashboard1?:language
 - Questions we will try to answer:
   - Who are the most injury-prone players? 
   - Which injuries occur most often?
-  - Average recovery time per injury?
 
 - `records.db` schema
   - `records(id, name, date, notes)`
@@ -114,4 +110,24 @@ https://public.tableau.com/views/NBA2024-25PlayerInjuryData/Dashboard1?:language
   - `datetime` - time deltas
 
 ## Visualization and Presentation
+- Tableau Public for our data visualization needs.
+- Required Files:
+  - aggregateInjuries.csv (from injury_analysis, exportToCSV, aggregateInjuryPeriods)
+  - injuryTypes.csv (from injury_analysis, exportToCSV2, aggregateInjuryTypes)
+  - player_data/2425_regszn.csv (from BR: https://www.basketball-reference.com/leagues/NBA_2025.html#all_per_game_team-opponent)
+  
+- Dashboard 1: Injured Days Vs. Injury Count and Injury Types Pie Chart
+  - We utilize our aggregateInjuries csv file we generated with injury_analysis.py. We also join this source file with the player statistics csv file from Basketball reference to acquire a filter for player minutes, allowing us to highlight only the 'significant' players likely to be acquired during draft day.
+  - I opted for a scatterplot to best show the outliers and reliable players with the x-axis being the injury count and injured days as the y-axis. I've also placed a minutes played (mp) filter to increase or decrease the number of players being shown on the graph. 
+  - For the Injury Types Pie Chart, this required the injuryTypes csv which contained each injury (non-distinct) and the corresponding player. This was not in the aggregateInjuries csv file as the 'injuries sustained' column contained multiple values. It was much easier to create a separate csv file instead of parsing through this column.
+  - The 'Other' category combines uncommon injuries ie. concussion, eye related injuries, etc.
+- Dashboard 2: Per Player Breakdown
+  - Again, we utilize the above sources to present a dot plot where each row is a player and each corresponding dot is a type of injury. Hovering on a dot will reveal the amount of times a player has sustained that injury and the full description of said injury. 
+  - We implement something similar with the Missed Games per Player Bar Chart where the x-axis is the number of games missed. A color gradient has also been added to represent a larger injury count (note this is not equal to days spent recovering from an injury).
+- Dashboard 3: Injury Breakdown
+  - We use a horizontal stacked bar chart to represent players for each injury, with each player being a different color. Hovering on a section of a bar reveals the player name and the number of times they have sustained this specific injury. 
 
+- Challenges for this process:
+  - Figuring out how to merge different csv datasets to create combined sources for data visualization and graphs. 
+  - Creating a phone layout as the default web layout will look very clunky on mobile view. 
+  - Learning Tableau's features: table calculations (vs. calculating said attribute in previous phases), differentiating between dimension/attribute/measure of data points, adding enough visuals so that the user can form insights within seconds of viewing the worksheets, decluttering visuals as some of the labels can overlap with each other, adding filters, using different types of charts, combining worksheets into dashboards, etc.
