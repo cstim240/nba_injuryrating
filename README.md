@@ -12,9 +12,45 @@ https://public.tableau.com/views/NBA2024-25PlayerInjuryData/Dashboard1?:language
 
 ### Audience: Fantasy Basketball Players, Casual fans, etc.
 
-## Setup and Usage 
-- Big picture: Scrape data with SeleniumBase and BeautifulSoup4 -> Save to SQLite database -> Analyze with SQL / pandas -> Export query to CSV -> Get player data from Basketball Reference --> Import CSVs into Tableau
-- Current objective: Create setup instructions for users. To adjust to a future or past season for analysis, we need to change the cutoff date variables, download the latest player statistics from Basketball reference, merge the generated and acquired CSVs into Tableau and create the data viz from scratch.
+# Setup and Usage 
+### What this project does (TL;DR)
+1. **Scrape injuries** from Pro Sports Transactions using **SeleniumBase + BeautifulSoup** (`injury_scraper.py`).
+2. **Store raw entries** in a local **SQLite** database.
+3. **Aggregate & clean** injury data with **pandas** (`injury_analysis.py`).
+4. **Export CSVs** for analysis and Tableau.
+5. **Join with player stats** (downloaded from Basketball Reference) in **Tableau** to build visualizations.
+6. *(Optional)* Embed the Tableau viz on a simple HTML page.
+
+---
+
+## Requirements
+- **Python 3.11+** (3.12 recommended)
+- **Google Chrome** (SeleniumBase manages the driver)
+- **Git**
+
+---
+
+## Install
+
+```bash
+# 1) Clone
+git clone https://github.com/cstim240/nba_injuryrating.git
+cd <nba_injuryrating>
+
+# (Optional) one-liner command: create the virtual environment and activate the programs in one-go:
+python3 -m venv .venv && source .venv/bin/activate && python -m pip install -U pip && pip install -r requirements.txt && python injury_scraper.py && python injury_analysis.py
+
+# 2) Create and activate a virtual environment
+python3 -m venv .venv
+source .venv/bin/activate        
+# Windows (PowerShell): .\.venv\Scripts\Activate.ps1
+
+# 3) Install dependencies
+python -m pip install -U pip
+pip install -r requirements.txt
+```
+
+- In-depth usage: injury_scraper.py need a few constants modified: the INITIAL_OFFSET of the url from ProSportsTransaction, CUTOFF_DATE, and the url itself. Then we can run it with: $ python3 injury_scraper.py. From here it would have generated a local SQL database using SQLite, this is the raw data containing each entry from the website, whether its a player returning from an injury, being put on injury reserve, or sustaining an injury, there will be multiple entries for the same player with a different incident. We process this raw data with injury_analysis.py, which again requires several constants to be modified: CUTOFF_YEAR, CUTOFF_DAY, CUTOFF_MONTH. We run it with: $python3 injury_analysis.py. This program produces TWO csv files, both found at the generatedCSVs directory. One is aggregateInjuries.csv which will contain one row per player, with columns for injury count, days spent recovering from injuries, and injuries sustained. The other is injuryTypes.csv which is more useful for inspecting the different kinds of injuries, there may be multiple rows for the same player, as this expands on the injuries sustained column from aggregateInjuries.csv. These two csv files along with the player stats downloadable from Basketball Reference should be sufficient in merging the datasets within Tableau, from here you can create data visualizations!
 
 ## Dataset and Data Collection Notes
 - Since injury data will keep growing and changing over time, we have decided to only acquire data from the indicated season (2024-25 via modifiable cutoff_date) using a one-time snapshot with injury_scraper VS. a live-automated data scraping program which is likely to get detected as a bot by the website.
