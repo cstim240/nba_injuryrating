@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Interactive Tableau dashboards for NBA 2024 to 2025 injury analysis."/>
+  <meta property="og:title" content="NBA 2024-25 Injury Dashboards" />
+  <meta property="og:description" content="Scatterplot, Pie Chart, Treemap, Bar Graphs" />
+  <meta property="og:type" content="website" />
+  <title>NBA 2024-25 Player Injury Report</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+    <header class="wrap">
+        <h1>NBA 2024–25 Player Injury Report</h1>
+        <p class="meta">Use the tabs below to switch between views (scatter, pie, treemap, bar, case studies).</p>
+    </header>
+
+    <main class="wrap">
+        <section class="card">
+            <h2>Insights from Analysis of 2024-25 NBA Injury Data</h2>
+            <section class="insights">
+                <p>
+                    Across the 2024-25 season of the NBA, injury data parsed from <em>Pro Sports Transaction</em> and player statistics acquired from <em>Basketball Reference</em> reveals several key patterns:
+                </p>
+                <ol>
+                    <li>
+                        <strong>Minutes Vs. Injuries:</strong>
+                        Players with higher minutes per game tend to miss more days due to injuries. Interestingly, the number of injuries does not always correlate with time lost -- as seen in Dashboards 1 and 2.
+                    </li>
+                    <li>
+                        <strong>Injury Types:</strong>
+                        We also see a staggering amount of injuries involve knees and ankles - LaMelo Ball, for instance, leads ankle injuries with a count of 7 reported incidents (Dashboard 3).
+                    </li>
+                    <li>
+                        <strong>Contextual Factors:</strong>
+                        Increasing the minutes played per game (MP) slider uncovers a pattern of top players sustaining these injuries, but one can also draw conclusions from other confounding variables such as age, team position (starter vs. bench warmer), and injury history as likely factors in a player's injury risk.
+                    </li>
+                    <li>
+                        <strong>Draft Strategy:</strong>
+                        How often a player gets injured shouldn't be the deciding factor when it comes to drafting a player -- let's take Jayson Tatum as an example. Due to team strategy like load management, we see star players resting for a few games here and there. However, when you look at his performance during the 2024-25 season, he's a solid <strong>Top 10</strong> performer. Rather, we should look at a multitude of statistics, from time spent injured to roster changes, to minutes played per game as strong variables in selecting a reliable and efficient player for your team.
+                    </li>
+                </ol>
+            </section>
+        </section>
+
+        <!-- Embedded Tableau section -->
+        <section class="card">
+            <h2>Explore the Interactive Report</h2>
+            <div class="viz">
+                <div class="tableauPlaceholder" id="viz1756681320377" aria-label="Interactive Tableau workbook: NBA player injury dashboards">
+                    <noscript>
+                        <a href="#">
+                            <img alt="Preview of the interactive dashboards"
+                                src="https://public.tableau.com/static/images/NB/NBA2024-25PlayerInjuryData/Dashboard1/1_rss.png" />
+                        </a>
+                    </noscript>
+                    <object class="tableauViz" style="display:none;" title="NBA Injury Dashboards" data-tab="viz" loading="lazy">
+                        <param name="host_url" value="https%3A%2F%2Fpublic.tableau.com%2F" />
+                        <param name="embed_code_version" value="3" />
+                        <param name="site_root" value="" />
+                        <param name="name" value="NBA2024-25PlayerInjuryData/Dashboard1" />
+                        <param name="tabs" value="yes" />
+                        <param name="toolbar" value="yes" />
+                        <param name="static_image" value="https://public.tableau.com/static/images/NB/NBA2024-25PlayerInjuryData/Dashboard1/1.png" />
+                        <param name="animate_transition" value="yes" />
+                        <param name="display_static_image" value="yes" />
+                        <param name="display_spinner" value="yes" />
+                        <param name="display_overlay" value="yes" />
+                        <param name="display_count" value="yes" />
+                        <param name="language" value="en-US" />
+                    </object>
+                </div>
+            </div>
+            <script type="text/javascript">
+                var divElement = document.getElementById('viz1756681320377');
+                var vizElement = divElement.getElementsByTagName('object')[0];
+                if (divElement.offsetWidth > 800) {
+                    vizElement.style.minWidth = '1000px';
+                    vizElement.style.maxWidth = '100%';
+                    vizElement.style.minHeight = '850px';
+                    vizElement.style.maxHeight = (divElement.offsetWidth * 0.75) + 'px';
+                } else if (divElement.offsetWidth > 500) {
+                    vizElement.style.minWidth = '1000px';
+                    vizElement.style.maxWidth = '100%';
+                    vizElement.style.minHeight = '850px';
+                    vizElement.style.maxHeight = (divElement.offsetWidth * 0.75) + 'px';
+                } else {
+                    vizElement.style.width = '100%';
+                    vizElement.style.minHeight = '1200px';
+                    vizElement.style.maxHeight = (divElement.offsetWidth * 1.77) + 'px';
+                }
+                var scriptElement = document.createElement('script');
+                scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+                vizElement.parentNode.insertBefore(scriptElement, vizElement);
+            </script>
+        </section>
+    </main>
+
+<footer class="wrap footer">
+    <p>
+        &copy; 2025 Tim Supan &bull;
+        <a href="https://github.com/cstim240/nba_injuryrating" target="_blank" rel="noopener">
+            View on GitHub
+        </a>
+    </p>
+</footer>
+
+</body>
+
+</body>
+</html>

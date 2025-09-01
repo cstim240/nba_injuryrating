@@ -1,0 +1,119 @@
+:root{
+  --bg:#0f0f0f;
+  --panel:#1a1a1a;
+  --text:#f3f3f3;
+  --muted:#a8a8a8;
+  --accent:#8ab4ff;
+  --radius:14px;
+}
+
+/* Background with subtle gradient */
+body{
+  margin:0;
+  color:var(--text);
+  font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:
+    radial-gradient(1200px 600px at 20% -10%, #1b2735 0%, transparent 60%),
+    radial-gradient(1200px 600px at 120% 110%, #132030 0%, transparent 60%),
+    var(--bg);
+}
+
+/* Centering container */
+.wrap{
+  max-width:1200px;
+  margin:auto;
+  padding:24px 16px;
+}
+
+header{
+  text-align:center;
+  padding:24px 0 8px;
+}
+header h1{margin:0 0 6px}
+header .meta{margin:0;color:var(--muted)}
+
+.insights {
+  background: #1a1a1a;   /* same as card background for consistency */
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: var(--radius);
+  color: var(--text);
+  line-height: 1.5;
+  font-size: 0.8rem;
+}
+
+.insights h2 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.insights p {
+  margin: 0.5rem 0 0;
+}
+
+
+
+/* Card to frame the viz */
+.card{
+  background:var(--panel);
+  border-radius:var(--radius);
+  padding:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+.card h2{
+  margin:0 0 10px;
+  color:var(--accent);
+  font-size:1.2rem;
+}
+
+/* Make the Tableau block center nicely */
+.viz {
+    display:flex;
+    justify-content: center;
+}
+
+/*.tableauPlaceholder{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:8px;
+}*/
+
+.tableauPlaceholder{
+    width: 100%;
+    max-width:1100px;
+    margin: 0 auto;
+}
+
+.tableauViz{
+  margin:auto;
+}
+
+.footer {
+  margin-top: 2rem;
+  padding: 1rem 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  border-top: 1px solid #333;
+}
+
+.footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+
+
+/* Responsive tweaks */
+@media (max-width:600px){
+  .wrap{padding:16px 12px}
+}
+

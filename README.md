@@ -4,6 +4,9 @@
 
 ### Business question: "Which NBA players are the most injury-prone based on historical data?"
 
+Quick link to the HTML page where my Worksheets are embedded!
+
+
 Quick link to the data viz:
 https://public.tableau.com/views/NBA2024-25PlayerInjuryData/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link
 
@@ -11,7 +14,7 @@ https://public.tableau.com/views/NBA2024-25PlayerInjuryData/Dashboard1?:language
 
 ## Setup and Usage 
 - Big picture: Scrape data with SeleniumBase and BeautifulSoup4 -> Save to SQLite database -> Analyze with SQL / pandas -> Export query to CSV -> Get player data from Basketball Reference --> Import CSVs into Tableau
-- Current objective: Embed tableau onto github pages
+- Current objective: Embed tableau onto github pages with a simple html/css setup and write down some of the insights gained from the data we analyzed.
 
 ## Dataset and Data Collection Notes
 - Since injury data will keep growing and changing over time, we have decided to only acquire data from the indicated season (2024-25 via modifiable cutoff_date) using a one-time snapshot with injury_scraper VS. a live-automated data scraping program which is likely to get detected as a bot by the website.
@@ -131,3 +134,8 @@ https://public.tableau.com/views/NBA2024-25PlayerInjuryData/Dashboard1?:language
   - Figuring out how to merge different csv datasets to create combined sources for data visualization and graphs. 
   - Creating a phone layout as the default web layout will look very clunky on mobile view. 
   - Learning Tableau's features: table calculations (vs. calculating said attribute in previous phases), differentiating between dimension/attribute/measure of data points, adding enough visuals so that the user can form insights within seconds of viewing the worksheets, decluttering visuals as some of the labels can overlap with each other, adding filters, using different types of charts, combining worksheets into dashboards, etc.
+
+- To preserve the interactibility of the Tableau Dashboards, I've decided to embed them onto a simple HTML file hosted on Github Pages. I'd also like to write down my insighs on here.
+  - I've also included some meta tags for the purposes of search engine optimization and indexing. 
+    - See: https://developers.google.com/search/docs/crawling-indexing/special-tags and https://gist.github.com/lancejpollard/1978404
+    - *og is for sharing previews. og refers to Open Graph tags which controls how the page loks when shared on social media.
