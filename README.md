@@ -5,7 +5,7 @@
 ### Business question: "Which NBA players are the most injury-prone based on historical data?"
 
 Quick link to the HTML page where my Worksheets are embedded!
-
+https://cstim240.github.io/nba_injuryrating/
 
 Quick link to the data viz:
 https://public.tableau.com/views/NBA2024-25PlayerInjuryData/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link
@@ -14,7 +14,7 @@ https://public.tableau.com/views/NBA2024-25PlayerInjuryData/Dashboard1?:language
 
 ## Setup and Usage 
 - Big picture: Scrape data with SeleniumBase and BeautifulSoup4 -> Save to SQLite database -> Analyze with SQL / pandas -> Export query to CSV -> Get player data from Basketball Reference --> Import CSVs into Tableau
-- Current objective: Embed tableau onto github pages with a simple html/css setup and write down some of the insights gained from the data we analyzed.
+- Current objective: Create setup instructions for users. To adjust to a future or past season for analysis, we need to change the cutoff date variables, download the latest player statistics from Basketball reference, merge the generated and acquired CSVs into Tableau and create the data viz from scratch.
 
 ## Dataset and Data Collection Notes
 - Since injury data will keep growing and changing over time, we have decided to only acquire data from the indicated season (2024-25 via modifiable cutoff_date) using a one-time snapshot with injury_scraper VS. a live-automated data scraping program which is likely to get detected as a bot by the website.
@@ -23,7 +23,7 @@ https://public.tableau.com/views/NBA2024-25PlayerInjuryData/Dashboard1?:language
   - Season Range Scraping (let users enter the season year they want to look into)!
   - Create a requirements.txt to list out installed libraries
   - Look into virtual environments
-- Data source: Pro Sports Transaction (PST) which has the most recent injury data and its free!
+- Data source: Pro Sports Transaction (PST) which has the most recent injury data and its free! And Basketball References to get Player minutes and other relevant performance statistics.
   
 
 - Notes: 
